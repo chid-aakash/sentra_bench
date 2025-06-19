@@ -1,0 +1,2 @@
+import{K as t,f as r,c as o,d as n}from"./index-77a1adb3.js";const s={},c={width:"16",height:"16",viewBox:"0 0 16 16",fill:"none",xmlns:"http://www.w3.org/2000/svg"};function i(l,e){return r(),o("svg",c,e[0]||(e[0]=[n("circle",{cx:"8",cy:"8",r:"4.5",fill:"transparent",stroke:"currentColor","stroke-width":"3"},null,-1)]))}const d=t(s,[["render",i]]);export{d as I};
+//# sourceMappingURL=IndicatorIcon-81343f13.js.map
