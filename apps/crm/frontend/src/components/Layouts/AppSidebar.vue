@@ -59,14 +59,29 @@
             </div>
           </template>
           <nav class="flex flex-col">
-            <SidebarLink
-              v-for="link in view.views"
-              :icon="link.icon"
-              :label="__(link.label)"
-              :to="link.to"
-              :isCollapsed="isSidebarCollapsed"
-              class="mx-2 my-0.5"
-            />
+            <template v-for="(link, index) in view.views" :key="link.label">
+              <!-- Labeled divider before first link groups -->
+              <div
+                v-if="link.label === 'Leads'"
+                class="sidebar-labeled-divider"
+              >
+                <span>{{ __('Sales') }}</span>
+              </div>
+              <div
+                v-else-if="link.label === 'Notes'"
+                class="sidebar-labeled-divider"
+              >
+                <span>{{ __('Tools') }}</span>
+              </div>
+
+              <SidebarLink
+                :icon="link.icon"
+                :label="__(link.label)"
+                :to="link.to"
+                :isCollapsed="isSidebarCollapsed"
+                class="mx-2 my-3"
+              />
+            </template>
           </nav>
         </Section>
       </div>

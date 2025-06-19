@@ -2,5 +2,7 @@
   "db_name": "_913e5601fed887a2",
   "db_password": "7bmD3eAZBQzWsJjd",
   "db_type": "mariadb",
-  "db_user": "_913e5601fed887a2"
+  "db_user": "_913e5601fed887a2",
+  "ignore_csrf": 1,
+  "developer_mode": 1
 }

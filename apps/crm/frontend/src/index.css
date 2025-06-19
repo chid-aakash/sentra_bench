@@ -6,6 +6,17 @@
   --color-sentra-apricot-jet: #e26f3c;
   --color-sentra-ocean-route: #4a868c;
   --color-sentra-dune-mist: #efe7dc;
+  /* --- Sidebar customization variables ------------------ */
+  /* Adjust these to resize or recolor sidebar items.       */
+  --sidebar-item-font-size: 1rem; /* label text size */
+  --sidebar-icon-size: 1rem; /* icon width/height */
+  --sidebar-item-height: 2.75rem; /* height of each button */
+  --sidebar-icon-label-gap: 0.85rem; /* distance between icon and label */
+  --sidebar-item-gap-y: 0.1rem; /* vertical gap between items */
+  /* ------------------------------------------------------ */
+  /* Primary brand colour references (same orange as sidebar) */
+  --brand-primary: var(--color-sentra-apricot-jet);
+  --brand-primary-rgb: 226, 111, 60; /* for alpha utilities */
 }
 
 @import 'frappe-ui/src/style.css';
@@ -30,5 +41,63 @@
 			prose-th:border-outline-gray-2
 			prose-th:p-2
 			prose-th:relative;
+  }
+}
+
+/* Specific tweaks for the sidebar -----------------------------------------*/
+#notifications-btn button {
+  height: calc(var(--sidebar-item-height) * 0.6);
+  font-size: calc(var(--sidebar-item-font-size) * 0.8);
+  opacity: 0.8; /* visually lighter */
+}
+
+/* Divider line style */
+.sidebar-divider {
+  @apply mx-2 my-2 border-t border-outline-gray-2;
+}
+
+/* Labeled divider (e.g., "Sales", "Tools") */
+.sidebar-labeled-divider {
+  @apply mx-2 mt-2 mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-ink-gray-5;
+}
+
+.sidebar-labeled-divider::after {
+  content: '';
+  @apply flex-1 border-t border-outline-gray-2;
+}
+
+/* Solid variant buttons pick up brand colour when no explicit theme */
+button.f-btn-solid,
+button.f-button-solid,
+button[class*='btn-solid'],
+.f-button-solid {
+  background-color: var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+  color: white !important;
+}
+button.f-btn-solid:hover,
+button.f-button-solid:hover,
+button[class*='btn-solid']:hover,
+.f-button-solid:hover {
+  background-color: rgb(var(--brand-primary-rgb) / 0.9) !important;
+}
+
+/* Generic list-row hover state (ListView / Kanban columns, etc.) */
+/* Targets table rows <tr>, ListView rows which render as <div role="row"> */
+tr:hover,
+[role='row']:hover {
+  background-color: rgb(var(--brand-primary-rgb) / 0.06) !important;
+}
+
+/* Utility classes for easy use in templates */
+@layer utilities {
+  .bg-brand-primary {
+    background-color: var(--brand-primary);
+  }
+  .hover\:bg-brand-primary:hover {
+    background-color: var(--brand-primary);
+  }
+  .text-brand-primary {
+    color: var(--brand-primary);
   }
 }

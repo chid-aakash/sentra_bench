@@ -211,13 +211,13 @@ function getStandardItem(item) {
 .brand-logo {
   width: var(--brand-logo-size, 3rem); /* 2rem = 32px */
   height: var(--brand-logo-size, 3rem);
-  margin-right: var(--brand-logo-gap, 0.5rem); /* 0.5rem = 8px */
-  transform: translateX(var(--brand-logo-offset, 0));
+  margin-right: var(--brand-logo-gap, -1.25rem); /* 0.5rem = 8px */
+  transform: translateX(var(--brand-logo-offset, -0.7rem));
 }
 
 .brand-name {
   font-family: var(--brand-font-family, inherit);
-  font-size: var(--brand-font-size, 1rem);
+  font-size: var(--brand-font-size, 1.285rem);
   font-weight: var(--brand-font-weight, 500);
   font-style: var(--brand-font-style, normal);
 }

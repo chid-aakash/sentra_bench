@@ -1,6 +1,11 @@
 <template>
   <button
-    class="group flex h-7 cursor-pointer items-center rounded text-ink-gray-7 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-outline-gray-3"
+    class="group flex cursor-pointer items-center rounded text-ink-gray-7 duration-300 ease-in-out focus:outline-none focus:transition-none focus-visible:rounded focus-visible:ring-2 focus-visible:ring-outline-gray-3"
+    :style="{
+      height: 'var(--sidebar-item-height)',
+      marginTop: 'var(--sidebar-item-gap-y)',
+      marginBottom: 'var(--sidebar-item-gap-y)',
+    }"
     :class="
       isActive
         ? 'bg-sentra-apricot-jet text-white shadow-sm'
@@ -15,16 +20,32 @@
       <div class="flex items-center truncate">
         <Tooltip :text="label" placement="right" :disabled="!isCollapsed">
           <slot name="icon">
-            <span class="grid flex-shrink-0 place-items-center">
+            <span
+              class="grid flex-shrink-0 place-items-center"
+              :style="{
+                width: 'var(--sidebar-icon-size)',
+                height: 'var(--sidebar-icon-size)',
+              }"
+            >
               <FeatherIcon
                 v-if="typeof icon == 'string'"
                 :name="icon"
-                class="size-4 text-current group-hover:text-sentra-apricot-jet"
+                class="w-full h-full text-current"
+                :class="
+                  isActive
+                    ? 'text-white'
+                    : 'group-hover:text-sentra-apricot-jet'
+                "
               />
               <component
                 v-else
                 :is="icon"
-                class="size-4 text-current group-hover:text-sentra-apricot-jet"
+                class="w-full h-full text-current"
+                :class="
+                  isActive
+                    ? 'text-white'
+                    : 'group-hover:text-sentra-apricot-jet'
+                "
               />
             </span>
           </slot>
@@ -36,7 +57,11 @@
           :hoverDelay="1.5"
         >
           <span
-            class="flex-1 flex-shrink-0 truncate text-sm duration-300 ease-in-out"
+            class="flex-1 flex-shrink-0 truncate duration-300 ease-in-out"
+            :style="{
+              fontSize: 'var(--sidebar-item-font-size)',
+              marginLeft: isCollapsed ? '0' : 'var(--sidebar-icon-label-gap)',
+            }"
             :class="
               isCollapsed
                 ? 'ml-0 w-0 overflow-hidden opacity-0'
