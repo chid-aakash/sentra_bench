@@ -1,0 +1,60 @@
+# ---- General ----
+# macOS
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+env/
+.venv/
+venv/
+ENV/
+
+# Packaging / build artifacts
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+# Testing
+.tox/
+.nox/
+pytest_cache/
+.coverage
+htmlcov/
+
+# ---- Node ----
+node_modules/
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ---- Editor / IDE ----
+.vscode/
+.idea/
+*~
+*.swp
+
+# ---- Frappe / Bench specific ----
+sites/assets/
+sites/*/*.log
+sites/*/*.pid
+sites/*/private/
+sites/*/public/files/
+
+# Redis & other runtime files
+config/*.pid
+config/*.rdb
+
+# ---- Git ----
+# Ignore nested git repository metadata in CRM app
+apps/crm/.git/ 
