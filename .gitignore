@@ -53,6 +53,8 @@ sites/*/public/files/
 
 # Redis & other runtime files
 config/*.pid
+config/pids/
+
 config/*.rdb
 
 # ---- Git ----
