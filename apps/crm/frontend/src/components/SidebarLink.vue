@@ -6,19 +6,24 @@
       marginTop: 'var(--sidebar-item-gap-y)',
       marginBottom: 'var(--sidebar-item-gap-y)',
     }"
-    :class="
-      isActive
-        ? 'bg-sentra-apricot-jet text-white shadow-sm'
-        : 'hover:bg-sentra-dune-mist hover:text-sentra-apricot-jet'
-    "
+    :class="[isActive ? 'ui-selected' : 'ui-hover']"
     @click="handleClick"
   >
     <div
       class="flex w-full items-center justify-between duration-300 ease-in-out"
-      :class="isCollapsed ? 'ml-[3px] p-1' : 'px-2 py-1'"
+      :style="{
+        'padding-top': 'var(--sidebar-link-py)',
+        'padding-bottom': 'var(--sidebar-link-py)',
+      }"
+      :class="isCollapsed ? 'ml-[3px] p-1' : 'px-2'"
     >
       <div class="flex items-center truncate">
-        <Tooltip :text="label" placement="right" :disabled="!isCollapsed">
+        <Tooltip
+          :text="label"
+          placement="right"
+          :disabled="!isCollapsed"
+          :hover-delay="isCollapsed ? 0 : 500"
+        >
           <slot name="icon">
             <span
               class="grid flex-shrink-0 place-items-center"

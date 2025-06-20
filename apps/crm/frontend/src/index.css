@@ -8,11 +8,12 @@
   --color-sentra-dune-mist: #efe7dc;
   /* --- Sidebar customization variables ------------------ */
   /* Adjust these to resize or recolor sidebar items.       */
-  --sidebar-item-font-size: 1rem; /* label text size */
-  --sidebar-icon-size: 1rem; /* icon width/height */
-  --sidebar-item-height: 2.75rem; /* height of each button */
-  --sidebar-icon-label-gap: 0.85rem; /* distance between icon and label */
-  --sidebar-item-gap-y: 0.1rem; /* vertical gap between items */
+  --sidebar-item-font-size: 0.9rem; /* label text size */
+  --sidebar-icon-size: 0.9rem; /* icon width/height */
+  --sidebar-item-height: 1.75rem; /* height of each button */
+  --sidebar-link-py: 0.25rem; /* vertical padding for the link */
+  --sidebar-icon-label-gap: 0.75rem; /* distance between icon and label */
+  --sidebar-item-gap-y: 0rem; /* vertical gap between items */
   /* ------------------------------------------------------ */
   /* Primary brand colour references (same orange as sidebar) */
   --brand-primary: var(--color-sentra-apricot-jet);
@@ -58,12 +59,13 @@
 
 /* Labeled divider (e.g., "Sales", "Tools") */
 .sidebar-labeled-divider {
-  @apply mx-2 mt-2 mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-ink-gray-5;
+  @apply mx-2 mt-1 mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-ink-gray-5;
 }
 
 .sidebar-labeled-divider::after {
   content: '';
   @apply flex-1 border-t border-outline-gray-2;
+  background-color: rgb(var(--brand-primary-rgb) / 0.9) !important;
 }
 
 /* Solid variant buttons pick up brand colour when no explicit theme */
@@ -84,9 +86,25 @@ button[class*='btn-solid']:hover,
 
 /* Generic list-row hover state (ListView / Kanban columns, etc.) */
 /* Targets table rows <tr>, ListView rows which render as <div role="row"> */
-tr:hover,
 [role='row']:hover {
-  background-color: rgb(var(--brand-primary-rgb) / 0.06) !important;
+  @apply ui-hover;
+  background-color: var(--color-sentra-dune-mist) !important;
+  color: var(--color-sentra-apricot-jet) !important;
+}
+
+/* Style for selected rows in a list view */
+[role='row'][aria-selected='true'],
+[role='row'] .bg-surface-gray-2 {
+  @apply ui-selected;
+  background-color: var(--color-sentra-apricot-jet) !important;
+  color: white !important;
+}
+
+/* Override frappe-ui's default hover background */
+[role='row']:hover .hover\\:bg-surface-menu-bar:hover {
+  @apply ui-hover;
+  background-color: var(--color-sentra-dune-mist) !important;
+  color: var(--color-sentra-apricot-jet) !important;
 }
 
 /* Utility classes for easy use in templates */
@@ -100,4 +118,48 @@ tr:hover,
   .text-brand-primary {
     color: var(--brand-primary);
   }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* Classes for consistent selected/hover states */
+  .ui-hover {
+    @apply hover:bg-sentra-dune-mist hover:text-sentra-apricot-jet;
+  }
+
+  .ui-selected {
+    @apply bg-sentra-apricot-jet text-white shadow-sm;
+  }
+}
+
+/* Custom Frappe UI Tooltip */
+.frappe-tooltip {
+  --tooltip-background-color: var(--color-sentra-apricot-jet);
+  --tooltip-text-color: white;
+  --tooltip-border-radius: 4px;
+  --tooltip-padding: 0.25rem 0.5rem;
+  --tooltip-font-size: 0.875rem;
+  --tooltip-z-index: 100;
+}
+
+/* --- Frappe UI List View Overrides --- */
+
+/* 1. Selected State Override */
+/* This targets the class frappe-ui uses for a selected row */
+.bg-surface-gray-2 {
+  @apply ui-selected;
+  background-color: var(--color-sentra-apricot-jet) !important;
+  color: white !important;
+}
+
+/* 2. Hover State Override */
+/* This targets the class frappe-ui uses for a hoverable row */
+.hover\\:bg-surface-menu-bar:hover {
+  @apply ui-hover;
+  background-color: var(--color-sentra-dune-mist) !important;
+  color: var(--color-sentra-apricot-jet) !important;
 }

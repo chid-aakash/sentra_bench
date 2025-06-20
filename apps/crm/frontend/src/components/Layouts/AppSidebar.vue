@@ -4,10 +4,21 @@
     :class="isSidebarCollapsed ? 'w-12' : 'w-[220px]'"
   >
     <div>
-      <UserDropdown class="p-2" :isCollapsed="isSidebarCollapsed" />
+      <UserDropdown class="px-2 py-1" :isCollapsed="isSidebarCollapsed" />
     </div>
-    <div class="flex-1 overflow-y-auto">
-      <div class="mb-3 flex flex-col">
+    <div
+      ref="scrollableArea"
+      class="flex-1 overflow-y-auto no-scrollbar"
+      @scroll="handleScroll"
+    >
+      <div class="mb-1 flex flex-col">
+        <SidebarLink
+          :to="{ name: 'Dashboard' }"
+          :label="__('Dashboard')"
+          :icon="DashboardIcon"
+          :isCollapsed="isSidebarCollapsed"
+          class="mx-2 my-0.5"
+        />
         <SidebarLink
           id="notifications-btn"
           :label="__('Notifications')"
@@ -30,10 +41,6 @@
         </SidebarLink>
       </div>
       <div v-for="view in allViews" :key="view.label">
-        <div
-          v-if="!view.hideLabel && isSidebarCollapsed && view.views?.length"
-          class="mx-2 my-2 h-1 border-b"
-        />
         <Section
           :label="view.name"
           :hideLabel="view.hideLabel"
@@ -41,13 +48,9 @@
         >
           <template #header="{ opened, hide, toggle }">
             <div
-              v-if="!hide"
+              v-if="!hide && !isSidebarCollapsed"
               class="flex cursor-pointer gap-1.5 px-1 text-base font-medium text-ink-gray-5 transition-all duration-300 ease-in-out"
-              :class="
-                isSidebarCollapsed
-                  ? 'ml-0 h-0 overflow-hidden opacity-0'
-                  : 'ml-2 mt-4 h-7 w-auto opacity-100'
-              "
+              :class="'ml-2 mt-4 h-7 w-auto opacity-100'"
               @click="toggle()"
             >
               <FeatherIcon
@@ -62,16 +65,14 @@
             <template v-for="(link, index) in view.views" :key="link.label">
               <!-- Labeled divider before first link groups -->
               <div
-                v-if="link.label === 'Leads'"
-                class="sidebar-labeled-divider"
-              >
-                <span>{{ __('Sales') }}</span>
-              </div>
+                v-if="link.group && isSidebarCollapsed"
+                class="sidebar-divider"
+              />
               <div
-                v-else-if="link.label === 'Notes'"
+                v-if="link.group && !isSidebarCollapsed"
                 class="sidebar-labeled-divider"
               >
-                <span>{{ __('Tools') }}</span>
+                <span>{{ __(link.group) }}</span>
               </div>
 
               <SidebarLink
@@ -79,14 +80,14 @@
                 :label="__(link.label)"
                 :to="link.to"
                 :isCollapsed="isSidebarCollapsed"
-                class="mx-2 my-3"
+                class="mx-2 my-0.5"
               />
             </template>
           </nav>
         </Section>
       </div>
     </div>
-    <div class="m-2 flex flex-col gap-1">
+    <div class="relative m-2 flex flex-col gap-1">
       <div class="flex flex-col gap-2 mb-1">
         <SignupBanner
           v-if="isDemoSite"
@@ -103,36 +104,54 @@
           :isSidebarCollapsed="isSidebarCollapsed"
         />
       </div>
-      <SidebarLink
-        v-if="isOnboardingStepsCompleted"
-        :label="__('Help')"
-        :isCollapsed="isSidebarCollapsed"
-        @click="
-          () => {
-            showHelpModal = minimize ? true : !showHelpModal
-            minimize = !showHelpModal
-          }
-        "
-      >
-        <template #icon>
-          <HelpIcon class="h-4 w-4" />
-        </template>
-      </SidebarLink>
-      <SidebarLink
-        :label="isSidebarCollapsed ? __('Expand') : __('Collapse')"
-        :isCollapsed="isSidebarCollapsed"
-        @click="isSidebarCollapsed = !isSidebarCollapsed"
-        class=""
-      >
-        <template #icon>
-          <span class="grid h-4 w-4 flex-shrink-0 place-items-center">
-            <CollapseSidebar
-              class="h-4 w-4 text-current duration-300 ease-in-out group-hover:text-sentra-apricot-jet"
-              :class="{ '[transform:rotateY(180deg)]': isSidebarCollapsed }"
-            />
-          </span>
-        </template>
-      </SidebarLink>
+
+      <!-- Scroll Indicator & Separator -->
+      <div class="">
+        <div class="h-1 flex items-center justify-center">
+          <button
+            v-if="!scrolledToBottom"
+            @click="scrollToBottom"
+            class="p-px"
+            aria-label="Scroll to bottom"
+          >
+            <FeatherIcon name="chevron-down" class="h-5 w-5 text-gray-600" />
+          </button>
+        </div>
+        <div class="sidebar-divider" />
+      </div>
+
+      <div class="flex items-center justify-between">
+        <SidebarLink
+          :label="isSidebarCollapsed ? __('Expand') : __('Collapse')"
+          :isCollapsed="isSidebarCollapsed"
+          @click="isSidebarCollapsed = !isSidebarCollapsed"
+        >
+          <template #icon>
+            <span class="grid h-4 w-4 flex-shrink-0 place-items-center">
+              <CollapseSidebar
+                class="h-4 w-4 text-current duration-300 ease-in-out group-hover:text-sentra-apricot-jet"
+                :class="{ '[transform:rotateY(180deg)]': isSidebarCollapsed }"
+              />
+            </span>
+          </template>
+        </SidebarLink>
+
+        <SidebarLink
+          v-if="isOnboardingStepsCompleted && !isSidebarCollapsed"
+          :label="__('Help')"
+          :isCollapsed="isSidebarCollapsed"
+          @click="
+            () => {
+              showHelpModal = minimize ? true : !showHelpModal
+              minimize = !showHelpModal
+            }
+          "
+        >
+          <template #icon>
+            <HelpIcon class="h-4 w-4" />
+          </template>
+        </SidebarLink>
+      </div>
     </div>
     <Notifications />
     <Settings />
@@ -176,6 +195,7 @@ import PhoneIcon from '@/components/Icons/PhoneIcon.vue'
 import CollapseSidebar from '@/components/Icons/CollapseSidebar.vue'
 import NotificationsIcon from '@/components/Icons/NotificationsIcon.vue'
 import HelpIcon from '@/components/Icons/HelpIcon.vue'
+import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import Notifications from '@/components/Notifications.vue'
 import Settings from '@/components/Settings/Settings.vue'
@@ -201,7 +221,17 @@ import {
 import { capture } from '@/telemetry'
 import router from '@/router'
 import { useStorage } from '@vueuse/core'
-import { ref, reactive, computed, h, markRaw, onMounted } from 'vue'
+import {
+  ref,
+  reactive,
+  computed,
+  h,
+  markRaw,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  nextTick,
+} from 'vue'
 
 const { getPinnedViews, getPublicViews } = viewsStore()
 const { toggle: toggleNotificationPanel } = notificationsStore()
@@ -213,12 +243,13 @@ const isDemoSite = ref(window.is_demo_site)
 
 const links = [
   {
+    group: 'Sales',
     label: 'Leads',
     icon: LeadsIcon,
     to: 'Leads',
   },
   {
-    label: 'Deals',
+    label: 'Deals (Trips)',
     icon: DealsIcon,
     to: 'Deals',
   },
@@ -228,11 +259,64 @@ const links = [
     to: 'Contacts',
   },
   {
-    label: 'Organizations',
-    icon: OrganizationsIcon,
-    to: 'Organizations',
+    label: 'Channels',
+    icon: SquareAsterisk,
+    to: 'Channels',
+  },
+  // {
+  //   label: 'Organizations',
+  //   icon: OrganizationsIcon,
+  //   to: 'Organizations',
+  // },
+  {
+    group: 'Itinerary',
+    label: 'Itineraries',
+    icon: NoteIcon,
+    to: 'Itineraries',
   },
   {
+    label: 'Costing & Quotes',
+    icon: TaskIcon,
+    to: 'Costing & Quotes',
+  },
+  {
+    label: 'Itinerary Builder',
+    icon: StepsIcon,
+    to: 'Itinerary Builder',
+  },
+  {
+    label: 'Itinerary Templates',
+    icon: Email2Icon,
+    to: 'Itinerary Templates',
+  },
+  {
+    group: 'Vendors',
+    label: 'DMCs',
+    icon: ContactsIcon,
+    to: 'DMCs',
+  },
+  {
+    label: 'Hotels',
+    icon: ContactsIcon,
+    to: 'Hotels',
+  },
+  {
+    label: 'Transport',
+    icon: ContactsIcon,
+    to: 'Transport',
+  },
+  {
+    label: 'Activity',
+    icon: ContactsIcon,
+    to: 'Activity',
+  },
+  {
+    label: 'Meals',
+    icon: ContactsIcon,
+    to: 'Meals',
+  },
+  {
+    group: 'Tools',
     label: 'Notes',
     icon: NoteIcon,
     to: 'Notes',
@@ -249,10 +333,33 @@ const links = [
   },
   {
     label: 'Email Templates',
-    icon: Email2Icon,
+    icon: EmailIcon,
     to: 'Email Templates',
   },
 ]
+
+let publicViews = ref([])
+
+const scrollableArea = ref(null)
+const scrolledToBottom = ref(true)
+
+const handleScroll = () => {
+  const el = scrollableArea.value
+  if (el) {
+    scrolledToBottom.value =
+      el.scrollHeight - el.scrollTop - el.clientHeight < 1
+  }
+}
+
+const scrollToBottom = () => {
+  const el = scrollableArea.value
+  if (el) {
+    el.scrollTo({
+      top: el.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
+}
 
 const allViews = computed(() => {
   let _views = [
@@ -525,6 +632,31 @@ onMounted(async () => {
   })
 
   setUp(filteredSteps)
+
+  getPinnedViews().then((views) => {
+    publicViews.value = views
+  })
+
+  const el = scrollableArea.value
+  if (el) {
+    el.addEventListener('scroll', handleScroll)
+  }
+  handleScroll()
+})
+
+onBeforeUnmount(() => {
+  const el = scrollableArea.value
+  if (el) {
+    el.removeEventListener('scroll', handleScroll)
+  }
+})
+
+watch(allViews, () => {
+  // When the list of views changes (e.g. after async fetch),
+  // wait for the DOM to update, then re-check the scroll state.
+  nextTick(() => {
+    handleScroll()
+  })
 })
 
 // help center

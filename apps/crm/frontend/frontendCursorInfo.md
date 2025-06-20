@@ -64,23 +64,29 @@ frontend/
 
 ### Component Hot-spots
 
-- **Sidebar:** `src/components/Layouts/AppSidebar.vue`  
-  – Handles collapse state, onboarding banners, notification counts, etc.
-- **Sidebar Link:** `src/components/SidebarLink.vue`  
-  – Single item (icon + label); uses CSS vars for size/spacing.
-- **Layout Header:** `src/components/Layouts/AppHeader.vue`  
-  – Top bar with breadcrumbs, quick actions, user avatar.
-- **Activities Timeline:** `src/components/Activities/`  
-  – Modular sub-areas for comments, email, calls, tasks…
+- **Sidebar:** `src/components/Layouts/AppSidebar.vue` and `src/components/SidebarLink.vue`.  
+  – The selected/hover logic is implemented here using global utility classes.
+- **Views (List, Kanban):** Styling for rows and buttons is globally managed. The hover and selected states for list items are controlled by global styles in `src/index.css` targeting `[role='row']`.
 - **Settings Pages:** `src/components/Settings/`  
   – Account, telephony, WhatsApp, etc.
 
 ### Styling / Theme
 
-- Global Tailwind layers + sentinel brand variables (`src/index.css`).
-- Theme extensions live in `tailwind.config.js`.
-- Sidebar-specific variables (height, icon size, gap) defined under `/* Sidebar customization variables */` in the root `:root` block – tweak to instantly reskin sidebar.
-- Brand accent orange is now exposed via `--brand-primary`; buttons (`variant="solid"`) and list-row hovers inherit this automatically.
+- **Core Engine:** The project uses **Tailwind CSS** with a **`frappe-ui` preset**.
+- **Centralized Theming:** The most critical file for custom theming is `src/index.css`. It defines global CSS variables and utility classes that control the application's look and feel.
+- **Interaction States (Selected & Hover):**
+  - To provide a consistent user experience, the application uses two global utility classes defined in `src/index.css`:
+    - `.ui-selected`: A solid orange background with white text. Used for active navigation links and selected items in lists.
+    - `.ui-hover`: A light cream background with orange text. Used for hover states on links and list items.
+  - These classes are applied through a combination of component logic (e.g., in `SidebarLink.vue`) and global CSS rules (e.g., for list view rows).
+- **Primary Color Control:** The `--brand-primary` CSS variable, which uses `--color-sentra-apricot-jet`, still controls the base theme color for elements like solid buttons.
+- **Applying the Theme:**
+  - **Sidebar:** `SidebarLink.vue` conditionally applies `.ui-selected` or `.ui-hover` based on the current route.
+  - **List Views:** `src/index.css` contains global rules that apply the `.ui-hover` class to `[role='row']:hover` and the `.ui-selected` class to `[role='row'][aria-selected='true']`. This ensures all list-based views have consistent styling without needing to modify each one individually.
+- **Buttons & Controls:**
+  - **Primary Buttons** (e.g., "Create", "Save"): Use the `variant="solid"` prop and are directly colored by `--brand-primary`.
+  - **Secondary Buttons** (e.g., "Filter", "Sort"): Use other variants like `variant="ghost"` and are styled by the base `frappe-ui` theme.
+- **Fonts & Sidebar:** Fonts are handled by Tailwind's defaults. The sidebar has its own set of CSS variables (`--sidebar-*`) in `src/index.css` for fine-tuning its layout.
 
 ---
 
@@ -120,10 +126,11 @@ Vite Hot-Module-Reload (HMR) is enabled; updating `.vue` or `.css` auto-refreshe
 
 ## Customisation Pointers
 
-1. **Brand colours / theme:** Edit CSS variables in `index.css` & extend Tailwind colours in `tailwind.config.js`.
-2. **Sidebar look & feel:** Tweak `--sidebar-*` vars or override classes in `SidebarLink.vue`.
-3. **Global fonts / spacing:** Adjust Tailwind config or add utilities in `index.css` under `@layer utilities`.
-4. **Icons:** All SVG components live in `src/components/Icons/`. Each is a self-contained Vue component (uses `currentColor` for easy theming).
+1.  **Primary Theme Color:** To change the main brand color, update `--color-sentra-apricot-jet` and `--brand-primary-rgb` in `src/index.css`. This affects solid buttons and other base elements.
+2.  **Selected/Hover Colors:** To change the selected or hover effects, modify the `.ui-selected` and `.ui-hover` utility classes in `src/index.css`.
+3.  **Sidebar Look & Feel:** Tweak the `--sidebar-*` variables in `src/index.css`.
+4.  **Fonts & Spacing:** Adjust the Tailwind config (`tailwind.config.js`) or add utility classes in `src/index.css`.
+5.  **Icons:** All SVG icons are self-contained Vue components in `src/components/Icons/`.
 
 ---
 
@@ -132,10 +139,10 @@ Vite Hot-Module-Reload (HMR) is enabled; updating `.vue` or `.css` auto-refreshe
 - **New Page / Module**
   1. Create a component in `src/pages/YourPage.vue`.
   2. Add a route in `router.js`.
-  3. (Optional) Add a sidebar link via `links` array in `AppSidebar.vue`.
+  3. (Optional) Add a sidebar link via the `links` array in `src/components/Layouts/AppSidebar.vue`.
 - **API Calls**  
   Use `frappe-ui`'s `call()` helper or Pinia actions. Backend endpoints live in Frappe apps.
 
 ---
 
-Happy hacking! ✨
+Happy hacking!! ✨

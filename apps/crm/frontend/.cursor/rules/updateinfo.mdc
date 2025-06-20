@@ -3,10 +3,10 @@ description:
 globs: 
 alwaysApply: true
 ---
-there is a file called cursorinfo.md within frontend folder which contains the latest Snapshot of the project.
+there is a file called frontendCursorinfo.md within frontend folder which contains the latest Snapshot of the project.
 
-it is imperativive that whatever new changes, old changes that doesnt reflect with the current cursorinfo.md is updated. 
+it is imperativive that whatever new changes, old changes that doesnt reflect with the current frontendCursorinfo.md is updated. 
 
-Do not use cursorinfo.mdc as a change log only make changes if you find the actual practical structure or features or implementation of the code differs from what it what is represented within cursorinfo.md, your goal is to try to reality with what is presented as reality within cursorinfo.mdc
+Do not use cursorinfo.mdc as a change log only make changes if you find the actual practical structure or features or implementation of the code differs from what it what is represented within frontendCursorinfo.md, your goal is to try to reality with what is presented as reality within frontendCursorinfo.md
 
-So while changing code or while coming across court that does not match with cursorinfo.md, it is your responsibility to change cursorinfo.md to match whatever is incongruent
+So while changing code or while coming across court that does not match with frontendCursorinfo.md, it is your responsibility to change frontendCursorinfo.md to match whatever is incongruent
