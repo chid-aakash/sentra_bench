@@ -59,4 +59,6 @@ config/*.rdb
 
 # ---- Git ----
 # Ignore nested git repository metadata in CRM app
-apps/crm/.git/ 
+apps/crm/.git/
+apps/frappe/.git/
+*.map
