@@ -62,5 +62,6 @@ config/*.rdb
 apps/crm/.git/
 apps/frappe/.git/
 *.map
-
+sw.js.map
+sw.js
 traviyo itinerary

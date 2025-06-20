@@ -196,6 +196,13 @@ import CollapseSidebar from '@/components/Icons/CollapseSidebar.vue'
 import NotificationsIcon from '@/components/Icons/NotificationsIcon.vue'
 import HelpIcon from '@/components/Icons/HelpIcon.vue'
 import DashboardIcon from '@/components/Icons/DashboardIcon.vue'
+import DocumentIcon from '@/components/Icons/DocumentIcon.vue'
+import MoneyIcon from '@/components/Icons/MoneyIcon.vue'
+import TerritoryIcon from '@/components/Icons/TerritoryIcon.vue'
+import ActivityIcon from '@/components/Icons/ActivityIcon.vue'
+import CalendarIcon from '@/components/Icons/CalendarIcon.vue'
+import AppsIcon from '@/components/Icons/AppsIcon.vue'
+import WebsiteIcon from '@/components/Icons/WebsiteIcon.vue'
 import SidebarLink from '@/components/SidebarLink.vue'
 import Notifications from '@/components/Notifications.vue'
 import Settings from '@/components/Settings/Settings.vue'
@@ -260,23 +267,23 @@ const links = [
   },
   {
     label: 'Channels',
-    icon: SquareAsterisk,
+    icon: AppsIcon,
     to: 'Channels',
   },
-  // {
-  //   label: 'Organizations',
-  //   icon: OrganizationsIcon,
-  //   to: 'Organizations',
-  // },
+  {
+    label: 'Organizations',
+    icon: OrganizationsIcon,
+    to: 'Organizations',
+  },
   {
     group: 'Itinerary',
     label: 'Itineraries',
-    icon: NoteIcon,
+    icon: DocumentIcon,
     to: 'Itineraries',
   },
   {
     label: 'Costing & Quotes',
-    icon: TaskIcon,
+    icon: MoneyIcon,
     to: 'Costing & Quotes',
   },
   {
@@ -292,27 +299,27 @@ const links = [
   {
     group: 'Vendors',
     label: 'DMCs',
-    icon: ContactsIcon,
+    icon: TerritoryIcon,
     to: 'DMCs',
   },
   {
     label: 'Hotels',
-    icon: ContactsIcon,
+    icon: WebsiteIcon,
     to: 'Hotels',
   },
   {
     label: 'Transport',
-    icon: ContactsIcon,
+    icon: AppsIcon,
     to: 'Transport',
   },
   {
     label: 'Activity',
-    icon: ContactsIcon,
+    icon: ActivityIcon,
     to: 'Activity',
   },
   {
     label: 'Meals',
-    icon: ContactsIcon,
+    icon: CalendarIcon,
     to: 'Meals',
   },
   {

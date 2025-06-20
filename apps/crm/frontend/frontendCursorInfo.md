@@ -81,8 +81,17 @@ frontend/
   - These classes are applied through a combination of component logic (e.g., in `SidebarLink.vue`) and global CSS rules (e.g., for list view rows).
 - **Primary Color Control:** The `--brand-primary` CSS variable, which uses `--color-sentra-apricot-jet`, still controls the base theme color for elements like solid buttons.
 - **Applying the Theme:**
-  - **Sidebar:** `SidebarLink.vue` conditionally applies `.ui-selected` or `.ui-hover` based on the current route.
-  - **List Views:** `src/index.css` contains global rules that apply the `.ui-hover` class to `[role='row']:hover` and the `.ui-selected` class to `[role='row'][aria-selected='true']`. This ensures all list-based views have consistent styling without needing to modify each one individually.
+  - **Sidebar:** `SidebarLink.vue` conditionally applies `.ui-selected` (solid orange) for the active route and `.ui-hover` (light orange) on hover.
+  - **List Views:** The hover and selected states for list view rows are now consistent with the sidebar. Hovering a row applies the `.ui-hover` class (light cream background, orange text). Selected rows (via the checkbox) receive the `.ui-selected` class (solid orange background, white text). This is controlled by hyper-specific overrides in `src/index.css` that are scoped with `[data-doctype]` to avoid affecting other elements.
+- **Overriding `frappe-ui` Components (The Hard Part):**
+  - **The Challenge:** `frappe-ui` components, like the list view, are built with their own internal Tailwind classes (e.g., `bg-surface-gray-2`, `hover:bg-surface-menu-bar`). These classes are applied directly to elements, making them difficult to override with simple, global CSS. Simple class selectors will lose the CSS specificity battle.
+  - **The Solution:** The only robust, permanent way to override these styles is to create **hyper-specific CSS rules** in our own `src/index.css`.
+  - **The Strategy:**
+    1. **Scoping:** We use a `[data-doctype]` attribute selector. This attribute exists on the root of the `ListView` component, so our styles will _only_ apply inside of it.
+    2. **Targeting:** We must target the _exact_ `frappe-ui` utility classes we want to override. For example, to change the hover background, we target `[role='row'].hover\\:bg-surface-menu-bar:hover`. For the selected state, we target `[role='row'].bg-surface-gray-2`.
+    3. **Forcefulness:** We use `!important` on every property to guarantee our styles win the specificity battle.
+    4. **Child Elements:** We must also create separate, specific rules to override the styles of child elements, especially for text color. For instance, `...:hover .text-ink-gray-7` must be targeted explicitly to change its color on hover.
+  - **This is the required pattern for reliably theming `frappe-ui` components that don't expose explicit theme props.**
 - **Buttons & Controls:**
   - **Primary Buttons** (e.g., "Create", "Save"): Use the `variant="solid"` prop and are directly colored by `--brand-primary`.
   - **Secondary Buttons** (e.g., "Filter", "Sort"): Use other variants like `variant="ghost"` and are styled by the base `frappe-ui` theme.
@@ -139,10 +148,4 @@ Vite Hot-Module-Reload (HMR) is enabled; updating `.vue` or `.css` auto-refreshe
 - **New Page / Module**
   1. Create a component in `src/pages/YourPage.vue`.
   2. Add a route in `router.js`.
-  3. (Optional) Add a sidebar link via the `links` array in `src/components/Layouts/AppSidebar.vue`.
-- **API Calls**  
-  Use `frappe-ui`'s `call()` helper or Pinia actions. Backend endpoints live in Frappe apps.
-
----
-
-Happy hacking!! ✨
+  3. (Optional) Add a sidebar link via the `

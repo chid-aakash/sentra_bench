@@ -77,34 +77,12 @@ button[class*='btn-solid'],
   border-color: var(--brand-primary) !important;
   color: white !important;
 }
+
 button.f-btn-solid:hover,
 button.f-button-solid:hover,
 button[class*='btn-solid']:hover,
 .f-button-solid:hover {
   background-color: rgb(var(--brand-primary-rgb) / 0.9) !important;
-}
-
-/* Generic list-row hover state (ListView / Kanban columns, etc.) */
-/* Targets table rows <tr>, ListView rows which render as <div role="row"> */
-[role='row']:hover {
-  @apply ui-hover;
-  background-color: var(--color-sentra-dune-mist) !important;
-  color: var(--color-sentra-apricot-jet) !important;
-}
-
-/* Style for selected rows in a list view */
-[role='row'][aria-selected='true'],
-[role='row'] .bg-surface-gray-2 {
-  @apply ui-selected;
-  background-color: var(--color-sentra-apricot-jet) !important;
-  color: white !important;
-}
-
-/* Override frappe-ui's default hover background */
-[role='row']:hover .hover\\:bg-surface-menu-bar:hover {
-  @apply ui-hover;
-  background-color: var(--color-sentra-dune-mist) !important;
-  color: var(--color-sentra-apricot-jet) !important;
 }
 
 /* Utility classes for easy use in templates */
@@ -146,20 +124,12 @@ button[class*='btn-solid']:hover,
   --tooltip-z-index: 100;
 }
 
-/* --- Frappe UI List View Overrides --- */
+/* --- Frappe UI List View Overrides (Simplified Test) --- */
 
-/* 1. Selected State Override */
-/* This targets the class frappe-ui uses for a selected row */
-.bg-surface-gray-2 {
-  @apply ui-selected;
-  background-color: var(--color-sentra-apricot-jet) !important;
-  color: white !important;
-}
-
-/* 2. Hover State Override */
-/* This targets the class frappe-ui uses for a hoverable row */
-.hover\\:bg-surface-menu-bar:hover {
-  @apply ui-hover;
-  background-color: var(--color-sentra-dune-mist) !important;
-  color: var(--color-sentra-apricot-jet) !important;
+/* 
+  This is a simplified rule to test the hover override.
+  If this works, the row will turn red on hover. 
+*/
+[data-doctype] .hover\\:bg-surface-menu-bar:hover {
+  background-color: red !important;
 }
